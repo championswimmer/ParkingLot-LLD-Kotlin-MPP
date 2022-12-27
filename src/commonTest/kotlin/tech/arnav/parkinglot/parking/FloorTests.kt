@@ -11,7 +11,7 @@ class FloorTests {
         val floor = Floor.Builder()
             .id(1)
             .addSlots(Type.CAR, 10)
-            .addSlots(Type.MOTORBIKE, 5)
+            .addSlots(Type.BIKE, 5)
             .build()
 
         assertEquals(1, floor.id)
