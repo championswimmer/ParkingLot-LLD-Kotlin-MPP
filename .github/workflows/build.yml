@@ -31,6 +31,11 @@ jobs:
         with:
           gradle-version: current
           arguments: jsProductionExecutableCompileSync
+      - name: Upload JS Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: js-build
+          path: build/js/packages/ParkingLot-LLD-Kotlin-MPP/kotlin/ParkingLot-LLD-Kotlin-MPP.js
 
   build_jvm:
     runs-on: ubuntu-latest
@@ -46,6 +51,11 @@ jobs:
         with:
           gradle-version: current
           arguments: assembleDist
+      - name: Upload JVM Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: jvm-build
+          path: build/distributions/ParkingLot-LLD-Kotlin-MPP-*.zip
 
   build_macos:
     runs-on: macos-latest
@@ -61,6 +71,11 @@ jobs:
         with:
           gradle-version: current
           arguments: macosX64Binaries
+      - name: Upload MacOS Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: macos-build
+          path: build/bin/macosX64/releaseExecutable/ParkingLot-LLD-Kotlin-MPP.kexe
 
   build_linux:
     runs-on: ubuntu-latest
@@ -76,6 +91,11 @@ jobs:
         with:
           gradle-version: current
           arguments: linuxX64Binaries
+      - name: Upload Linux Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build
+          path: build/bin/linuxX64/releaseExecutable/ParkingLot-LLD-Kotlin-MPP.kexe
 
   build_windows:
     runs-on: windows-latest
@@ -91,18 +111,32 @@ jobs:
         with:
           gradle-version: current
           arguments: mingwX64Binaries
+      - name: Upload Windows Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows-build
+          path: build/bin/mingwX64/releaseExecutable/ParkingLot-LLD-Kotlin-MPP.exe
 
-#  release:
-#    needs: "build"
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Make Release
-#        uses: softprops/action-gh-release@v1
-#        if: startsWith(github.ref, 'refs/tags/')
-#        with:
-#          files: |
-#            build/bin/linuxX64/releaseExecutable/ParkingLot-LLD-Kotlin-MPP.kexe
-#            build/bin/macosX64/releaseExecutable/ParkingLot-LLD-Kotlin-MPP.kexe
-#            build/bin/mingwX64/releaseExecutable/ParkingLot-LLD-Kotlin-MPP.exe
-#            build/distributions/ParkingLot-LLD-Kotlin-MPP-*.zip
-#            build/js/packages/ParkingLot-LLD-Kotlin-MPP/kotlin/ParkingLot-LLD-Kotlin-MPP.js
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs:
+      - "build_js"
+      - "build_jvm"
+      - "build_macos"
+      - "build_linux"
+      - "build_windows"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Builds
+        uses: actions/download-artifact@v3
+        with:
+          path: build
+      - name: Make Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build/linux-build/ParkingLot-LLD-Kotlin-MPP.kexe
+            build/macos-build/ParkingLot-LLD-Kotlin-MPP.kexe
+            build/windows-build/ParkingLot-LLD-Kotlin-MPP.exe
+            build/jvm-build/ParkingLot-LLD-Kotlin-MPP-*.zip
+            build/js-build/kotlin/ParkingLot-LLD-Kotlin-MPP.js
