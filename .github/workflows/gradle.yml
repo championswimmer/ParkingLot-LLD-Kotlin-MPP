@@ -32,3 +32,13 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
+    - name: Make Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          build/bin/linuxX64/releaseExecutable/ParkingLot-LLD-Kotlin-MPP.kexe
+          build/bin/macosX64/releaseExecutable/ParkingLot-LLD-Kotlin-MPP.kexe
+          build/bin/mingwX64/releaseExecutable/ParkingLot-LLD-Kotlin-MPP.exe
+          build/distributions/ParkingLot-LLD-Kotlin-MPP-*.zip
+          build/js/packages/ParkingLot-LLD-Kotlin-MPP/kotlin/ParkingLot-LLD-Kotlin-MPP.js
