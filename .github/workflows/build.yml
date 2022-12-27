@@ -131,12 +131,16 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: build
+      - name: Rename Releases
+        run: |
+          mv build/linux-build/ParkingLot-LLD-Kotlin-MPP.kexe build/linux-build/ParkingLot-LLD-Kotlin-MPP.linux.bin
+          mv build/macos-build/ParkingLot-LLD-Kotlin-MPP.kexe build/macos-build/ParkingLot-LLD-Kotlin-MPP.macos.bin
       - name: Make Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            build/linux-build/ParkingLot-LLD-Kotlin-MPP.kexe
-            build/macos-build/ParkingLot-LLD-Kotlin-MPP.kexe
+            build/linux-build/ParkingLot-LLD-Kotlin-MPP.linux.bin
+            build/macos-build/ParkingLot-LLD-Kotlin-MPP.macos.bin
             build/windows-build/ParkingLot-LLD-Kotlin-MPP.exe
             build/jvm-build/ParkingLot-LLD-Kotlin-MPP-*.zip
             build/js-build/kotlin/ParkingLot-LLD-Kotlin-MPP.js
