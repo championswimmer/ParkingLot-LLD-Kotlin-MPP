@@ -1,12 +1,13 @@
 package tech.arnav.parkinglot.parking
 
 import tech.arnav.parkinglot.vehicle.Type
+import tech.arnav.parkinglot.vehicle.Vehicle
 
 class Floor private constructor(
     val id: Int,
     val slots: List<Slot>,
     var emptySlots: Map<Type, Int>
-) {
+): ParkHandler {
     fun updateEmptySlots() {
         emptySlots = slots.groupBy { it.type }.mapValues {
             it.value.count { slot -> slot.vehicle == null }
@@ -30,5 +31,21 @@ class Floor private constructor(
         }
 
         fun build() = Floor(id, slots, slots.groupBy { it.type }.mapValues { it.value.size })
+    }
+
+    override fun park(vehicle: Vehicle): String {
+        val emptySlot = slots.find { it.vehicle == null && it.type == vehicle.type }
+            ?: throw IllegalStateException("No empty slots available")
+        val parkedSlotId = emptySlot.park(vehicle)
+        updateEmptySlots()
+        return "$id-$parkedSlotId"
+    }
+
+    override fun unpark(vehicle: Vehicle): Boolean {
+        val slot = slots.find { it.vehicle == vehicle }
+            ?: throw IllegalStateException("Vehicle with registration number ${vehicle.registrationNumber} not found")
+        slot.unpark(vehicle)
+        updateEmptySlots()
+        return true
     }
 }

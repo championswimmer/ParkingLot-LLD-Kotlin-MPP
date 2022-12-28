@@ -6,4 +6,5 @@ data class Vehicle(
     val type: Type,
     val brand: String,
     val model: String
+
 )

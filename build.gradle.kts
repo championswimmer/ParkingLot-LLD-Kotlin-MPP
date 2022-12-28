@@ -72,4 +72,7 @@ application {
 
 dependencies {
     commonMainImplementation("com.github.ajalt.clikt:clikt:3.5.0")
+
+    // test dependencies
+    testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
 }
