@@ -1,6 +1,5 @@
 package tech.arnav.parkinglot.cli
 
-import com.github.ajalt.clikt.output.TermUi.prompt
 import tech.arnav.parkinglot.parking.Floor
 import tech.arnav.parkinglot.parking.Lot
 import tech.arnav.parkinglot.vehicle.Color
@@ -16,7 +15,7 @@ class CLIItemFactory {
         fun createLot(): Lot {
             val lotBuilder = Lot.Builder()
             val floors = prompt("How many floors are there in the parking lot?")
-                ?.toInt()
+                .toIntOrNull()
                 ?: throw IllegalArgumentException("Invalid number of floors")
 
             for (floor in 0 until floors) {
@@ -32,7 +31,7 @@ class CLIItemFactory {
             val floorBuilder = Floor.Builder()
             Type.values().forEach { type ->
                 val slots = prompt("How many ${type.name} slots are there on floor $floorId?")
-                    ?.toInt()
+                    .toIntOrNull()
                     ?: throw IllegalArgumentException("Invalid number of slots")
                 floorBuilder.addSlots(type, slots)
             }
@@ -44,17 +43,17 @@ class CLIItemFactory {
          */
         fun createVehicle(): Vehicle {
             val type = prompt("What type of vehicle is it? " + Type.values().joinToString(" | ") { it.name })
-                ?.let { Type.valueOf(it) }
+                .takeIf { it.isNotEmpty() }?.let { Type.valueOf(it.trim()) }
                 ?: throw IllegalArgumentException("Invalid vehicle type")
             val registrationNumber = prompt("What is the registration number of the vehicle?")
                 ?: throw IllegalArgumentException("Invalid registration number")
             val color = prompt("What is the color of the vehicle? " + Color.values().joinToString(" | ") { it.name })
-                ?.let { Color.valueOf(it) }
+                .takeIf { it.isNotEmpty() }?.let { Color.valueOf(it) }
                 ?: throw IllegalArgumentException("Invalid color")
             val brand = prompt("What is the brand of the vehicle?")
-                ?: throw IllegalArgumentException("Invalid brand")
+                .takeIf { it.isNotEmpty() } ?: throw IllegalArgumentException("Brand cannot be empty")
             val model = prompt("What is the model of the vehicle?")
-                ?: throw IllegalArgumentException("Invalid model")
+                .takeIf { it.isNotEmpty() } ?: throw IllegalArgumentException("Model cannot be empty")
 
             return Vehicle(registrationNumber, color, type, brand, model)
         }

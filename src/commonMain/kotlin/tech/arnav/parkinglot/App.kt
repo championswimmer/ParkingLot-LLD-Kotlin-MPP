@@ -2,6 +2,7 @@ package tech.arnav.parkinglot
 
 import tech.arnav.parkinglot.cli.CLIItemFactory
 import tech.arnav.parkinglot.cli.StatusPrinter
+import tech.arnav.parkinglot.cli.prompt
 
 class App {
     fun start() {
@@ -11,6 +12,7 @@ class App {
         StatusPrinter.printLotStatus(parkingLot)
 
         val vehicle = CLIItemFactory.createVehicle()
+        println(vehicle)
 
     }
 }

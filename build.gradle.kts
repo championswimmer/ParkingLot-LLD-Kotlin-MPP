@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform") version "1.7.20"
     application
+    distribution
 }
 
 group = "tech.arnav"
@@ -44,6 +45,7 @@ kotlin {
     js(IR) {
         binaries.executable()
         nodejs {
+            useCommonJs()
         }
     }
     sourceSets {
@@ -60,8 +62,16 @@ kotlin {
         val macosX64Main by getting
         val macosX64Test by getting
         val jvmMain by getting
-        val jvmTest by getting
-        val jsMain by getting
+        val jvmTest by getting {
+            dependencies {
+                implementation("com.github.stefanbirkner:system-lambda:1.2.1")
+            }
+        }
+        val jsMain by getting {
+            dependencies {
+                implementation(npm("readline-sync", "1.4.10"))
+            }
+        }
         val jsTest by getting
     }
 }
@@ -71,8 +81,5 @@ application {
 }
 
 dependencies {
-    commonMainImplementation("com.github.ajalt.clikt:clikt:3.5.0")
 
-    // test dependencies
-    testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
 }

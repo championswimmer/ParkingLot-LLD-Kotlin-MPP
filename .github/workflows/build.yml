@@ -30,12 +30,14 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: current
-          arguments: jsProductionExecutableCompileSync
+          arguments: compileProductionExecutableKotlinJs
+      - name: Tar Artifact
+        run: tar -czf ParkingLot-LLD-Kotlin-MPP.nodejs.tgz build/js/packages/ParkingLot-LLD-Kotlin-MPP
       - name: Upload JS Build
         uses: actions/upload-artifact@v2
         with:
           name: js-build
-          path: build/js/packages/ParkingLot-LLD-Kotlin-MPP/kotlin/ParkingLot-LLD-Kotlin-MPP.js
+          path: ParkingLot-LLD-Kotlin-MPP.nodejs.tgz
 
   build_jvm:
     runs-on: ubuntu-latest
@@ -143,4 +145,4 @@ jobs:
             build/macos-build/ParkingLot-LLD-Kotlin-MPP.macos.bin
             build/windows-build/ParkingLot-LLD-Kotlin-MPP.exe
             build/jvm-build/ParkingLot-LLD-Kotlin-MPP-*.zip
-            build/js-build/kotlin/ParkingLot-LLD-Kotlin-MPP.js
+            build/js-build/ParkingLot-LLD-Kotlin-MPP.nodejs.tgz
