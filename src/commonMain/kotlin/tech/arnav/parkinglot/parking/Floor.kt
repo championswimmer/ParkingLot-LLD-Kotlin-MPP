@@ -33,6 +33,7 @@ class Floor private constructor(
         fun build() = Floor(id, slots, slots.groupBy { it.type }.mapValues { it.value.size })
     }
 
+    @Throws(IllegalStateException::class)
     override fun park(vehicle: Vehicle): String {
         val emptySlot = slots.find { it.vehicle == null && it.type == vehicle.type }
             ?: throw IllegalStateException("No empty slots available")
@@ -41,6 +42,7 @@ class Floor private constructor(
         return "$id-$parkedSlotId"
     }
 
+    @Throws(IllegalStateException::class)
     override fun unpark(vehicle: Vehicle): Boolean {
         val slot = slots.find { it.vehicle == vehicle }
             ?: throw IllegalStateException("Vehicle with registration number ${vehicle.registrationNumber} not found")

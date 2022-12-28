@@ -8,6 +8,7 @@ data class Slot(
     val type: Type,
     var vehicle: Vehicle? = null
 ) : ParkHandler {
+    @Throws(IllegalStateException::class)
     override fun park(vehicle: Vehicle): String {
         if (this.vehicle != null) {
             throw IllegalStateException("Slot is already occupied")
@@ -16,6 +17,7 @@ data class Slot(
         return this.id.toString()
     }
 
+    @Throws(IllegalStateException::class)
     override fun unpark(vehicle: Vehicle): Boolean {
         if (this.vehicle != vehicle) {
             throw IllegalStateException("Wrong vehicle parked in this slot")

@@ -8,6 +8,11 @@ class Lot(
 ): ParkHandler {
     private val parkingIds: MutableMap<Vehicle, String> = mutableMapOf()
     fun getFloor(id: Int) = floors.find { it.id == id }
+    fun findVehicle(registrationNumber: String): Vehicle {
+        return parkingIds.keys.find {
+            it.registrationNumber == registrationNumber
+        } ?: throw IllegalStateException("Vehicle $registrationNumber not found in this lot")
+    }
 
     /**
      * Lot Builder
@@ -21,6 +26,7 @@ class Lot(
         fun build() = Lot(id, floors)
     }
 
+    @Throws(IllegalStateException::class)
     override fun park(vehicle: Vehicle): String {
         val floor = floors.find {
             val emptySlotsOfType = it.emptySlots.get(vehicle.type)
@@ -33,6 +39,7 @@ class Lot(
         return parkingId
     }
 
+    @Throws(IllegalStateException::class)
     override fun unpark(vehicle: Vehicle): Boolean {
         val parkingId = parkingIds[vehicle]
             ?: throw IllegalStateException("Vehicle with registration number ${vehicle.registrationNumber} not found")

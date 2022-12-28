@@ -1,6 +1,7 @@
 package tech.arnav.parkinglot
 
 import tech.arnav.parkinglot.cli.CLIItemFactory
+import tech.arnav.parkinglot.cli.CLIParkingLotManager
 import tech.arnav.parkinglot.cli.StatusPrinter
 import tech.arnav.parkinglot.cli.prompt
 
@@ -11,8 +12,7 @@ class App {
         val parkingLot = CLIItemFactory.createLot()
         StatusPrinter.printLotStatus(parkingLot)
 
-        val vehicle = CLIItemFactory.createVehicle()
-        println(vehicle)
+        CLIParkingLotManager(parkingLot).start()
 
     }
 }
